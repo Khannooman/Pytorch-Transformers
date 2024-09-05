@@ -203,7 +203,7 @@ def train_model(config):
 
             global_step += 1
 
-        run_validation(model, val_dataloader, tokenizer_src, config['seq_len'], device, 
+        run_validation(model, val_dataloader, tokenizer_src,tokenizer_tgt, config['seq_len'], device, 
                            lambda msg: batch_iterator.write(msg))
 
         # save the model at the end of every epoch  
