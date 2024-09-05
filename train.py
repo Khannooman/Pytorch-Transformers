@@ -10,7 +10,7 @@ from tokenizers.pre_tokenizers import Whitespace
 from dataset import BilingualDataset, casual_mask
 from config import get_weights_file_path, get_config
 from tqdm import tqdm
-import warnings
+import warnings 
 
 
 from torch.utils.tensorboard import SummaryWriter
@@ -46,7 +46,7 @@ def greedy_decode(model, source, source_mask, tokenizer_src, tokenizer_tgt, max_
     return decoder_input.squeeze(0)    
 
 
-def run_validation(model, validation_ds, tokenizer_src, tokenizer_tgt, max_len, device, print_msg, global_state, writer, num_example=2):
+def run_validation(model, validation_ds, tokenizer_src, tokenizer_tgt, max_len, device, print_msg, num_example=2):
     model.eval()
     count = 0
 
@@ -62,7 +62,7 @@ def run_validation(model, validation_ds, tokenizer_src, tokenizer_tgt, max_len, 
         for batch in validation_ds:
             count += 1
             encoder_input = batch["encoder_input"].to(device)
-            encoder_mask = batch["encoder_output"].to(device)
+            encoder_mask = batch["encoder_mask"].to(device)
 
             assert encoder_input.size(0) == 1, "Batch size must be 1 for validation"
 
@@ -204,7 +204,7 @@ def train_model(config):
             global_step += 1
 
         run_validation(model, val_dataloader, tokenizer_src, config['seq_len'], device, 
-                           lambda msg: batch_iterator.write(msg), global_step)
+                           lambda msg: batch_iterator.write(msg))
 
         # save the model at the end of every epoch  
         model_filename = get_weights_file_path(config, f'{epoch:02d}')
